@@ -1,0 +1,47 @@
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+
+@Component({
+  selector: 'app-animation4',
+  templateUrl: './animation4.component.html',
+  styleUrls: ['./animation4.component.css']
+})
+export class Animation4Component implements OnInit {
+
+  @ViewChild('myCanvas') myCanvas: ElementRef<HTMLCanvasElement>;
+  context: CanvasRenderingContext2D;
+  obj = [
+    { key: 'ArrowUp', value: 0, x: 0, y: 0 },
+    { key: 'ArrowRight', value: 90, x: -30, y: 0 },
+    { key: 'ArrowDown', value: 180, x: -30, y: 30 },
+    { key: 'ArrowLeft', value: 270, x: 0, y: 30 }
+  ];
+
+  constructor() { }
+
+  ngOnInit(): void {
+    setTimeout(() => {
+      this.draw();
+    }, 0);
+  }
+
+  draw() {
+    this.context = this.myCanvas.nativeElement.getContext('2d');
+    this.context.font = '40px Helvetica';
+    this.context.translate(150, 0);
+    for (let i = 0; i < 4; i++) {
+      let randomNo = this.randomIntFromInterval(0, 3);
+      this.context.translate(i * 100, 200);
+      this.context.rotate((Math.PI / 180) * this.obj[randomNo].value);      
+      this.context.fillText('C', this.obj[randomNo].x, this.obj[randomNo].y);
+      this.context.rotate(-(Math.PI / 180) * this.obj[randomNo].value);
+      this.context.translate(-i * 100, -200);
+    }
+  }
+
+  randomIntFromInterval(min, max): number {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+}
